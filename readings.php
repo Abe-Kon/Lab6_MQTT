@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "WTL";
+$dbname = "iotlab6";
 
 $con = mysqli_connect($servername, $username, $password, $dbname);
 
@@ -12,18 +12,22 @@ if (!$con) {
     exit();
 };
 
-$TankID = " ";
-$Reading = " ";
+$Sensor = " ";
+$ID = " ";
+$SensorReading = " ";
 
-if (isset($_GET['ReadingID'])) {
-    $TankID = $_GET['TankID'];
+if (isset($_GET['Sensor'])) {
+    $Sensor = $_GET['Sensor'];
+}
+if (isset($_GET['ID'])) {
+    $ID = $_GET['ID'];
 }
 
 if (isset($_GET['SensorReading'])) {
-    $Reading = $_GET['SensorReading'];
+    $SensorReading = $_GET['SensorReading'];
 }
 
-$sql = "INSERT INTO `Readings` (`ReadingID`,`SensorReading`) VALUE ('{$SensorID}','{$SensorReading}')";
+$sql = "INSERT INTO `Readings` (`Sensor`,`ID`,`SensorReading`) VALUE ('{$Sensor}','{$ID}','{$SensorReading}')";
 
 
  if (mysqli_query($con, $sql)){
