@@ -15,11 +15,20 @@
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 
+#include <Arduino.h>
+
+#include <WiFiMulti.h>
+
+#include <HTTPClient.h>
+#include <Wire.h> 
+#include <WebServer.h>
+
 #include "DHT.h"
 #define DHTPIN 23
 #define DHTTYPE DHT22
 
 DHT dht(DHTPIN, DHTTYPE);
+WiFiMulti wifiMulti;
 //---- WiFi settings
 const char* ssid = "Ttbi";
 const char* password = "yaakonadu1";
