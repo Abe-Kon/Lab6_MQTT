@@ -15,12 +15,18 @@
 #include <PubSubClient.h>
 #include <WiFiClientSecure.h>
 
+#include "DHT.h"
+#define DHTPIN 23
+#define DHTTYPE DHT22
+
+DHT dht(DHTPIN, DHTTYPE);
 //---- WiFi settings
 const char* ssid = "Ttbi";
 const char* password = "yaakonadu1";
 
-//const char* ssid = "macokeyF";
-//const char* password = "nathan1234567";
+//values
+float temperature;
+float humidity;
 
 
 //---- MQTT Broker settings
@@ -41,8 +47,8 @@ int sensor1 = 0;
 float sensor2 = 0;
 int command1 =0;
 
-const char* sensor1_topic= "testtopic";
-const char*  sensor2_topic="sensor2";
+const char* sensor1_topic= "Humidity";
+const char*  sensor2_topic="Temperature";
 //const char*  sensor2_topic="sensor3";
 
 const char* command1_topic="command1";
@@ -89,6 +95,7 @@ emyPxgcYxn/eR44/KJ4EBs+lVDR3veyJm+kXQ99b21/+jh5Xos1AnX5iItreGCc=
 
 //==========================================
 void setup_wifi() {
+  dht.begin();
   delay(10);
   Serial.print("\nConnecting to ");
   Serial.println(ssid);
@@ -165,11 +172,14 @@ void loop() {
   client.loop();
 
   //---- example: how to publish sensor values every 5 sec
+  humidity = dht.readHumidity();
+  // Read temperature as Celsius (the default)
+  temperature = dht.readTemperature();
   unsigned long now = millis();
   if (now - lastMsg > 5000) {
     lastMsg = now;
-    sensor1= random(50);       // replace the random value with your sensor value
-    sensor2= 20+random(80);    // replace the random value  with your sensor value
+    sensor1= humidity;       // replace the random value with your sensor value
+    sensor2= temperature;    // replace the random value  with your sensor value
     publishMessage(sensor1_topic,String(sensor1),true);    
     publishMessage(sensor2_topic,String(sensor2),true);
     
@@ -191,17 +201,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
      else digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off 
   }
 
-   //  check for other commands
- /*  else  if( strcmp(topic,command2_topic) == 0){
-     if (incommingMessage.equals("1")) {  } // do something else
-  }
-  */
 }
 
 
 
-//======================================= publising as string
+//======================================= publishing as string
 void publishMessage(const char* topic, String payload , boolean retained){
   if (client.publish(topic, payload.c_str(), true))
-      Serial.println("Message publised ["+String(topic)+"]: "+payload);
+      Serial.println("Message published ["+String(topic)+"]: "+payload);
 }
+
