@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Lab 6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--<link href="style.css" rel="stylesheet" type="text/css" />-->
+    <meta name="Author" content="Group of 5">
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center
+        }
+
+       
+        /* .btn {
+            display: block;
+            width: 280px;
+            margin: auto;
+            padding: 30px
+        } */
+
+        /* .btn {
+            font-size: 30px;
+            color: black;
+            text-decoration: none
+        } */
+        
+        .on {
+            background-color: SkyBlue
+        }
+
+        .off {
+            background-color: LightSteelBlue
+        }
+
+        .zero {
+            background-color: Thistle
+        }
+        .center 
+        {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .alert {
+            padding: 20px;
+            font-size: 20px;
+            background-color: blue; /* Red */
+            color: white;
+            margin-bottom: 15px;
+        }
+       
+        body {
+        background-color:#FFFFFF;
+       }
+        th,td {
+            font-size: 20px;
+            margin-top: 50px;
+            margin-bottom: 5px;
+            padding-top: 10px;
+            padding-bottom: 20px;
+            padding-left: 30px;
+            padding-right: 40px;
+            border-color: #FFFFFF;
+        }    
+
+        p {
+            font-size: 30px;
+            margin-top: 50px;
+            margin-bottom: 5px
+        }
+    </style>
+</head>
+
+<body>
+   
+    <section>
+        <h1 class="display-1">
+            <p1 style="color:blue;">Humidity and Temperature Dashboard</p1><br />
+        </h1>
+
+        <div class="alert alert-primary" role="alert">
+            We will fetch sensor readings of a particular owner in the db
+          </div>
+   
+          <div class="mb-3 row">
+            <label for="theText" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="theText" placeholder="Enter an ID (1/2)">
+            </div>
+            <div class="col-sm-2">
+                <button onclick="updateByAJAX_dbData()" class="btn btn-outline-primary mb-3">Fetch info</button>
+              </div>
+          </div>
+          
+          </section>
+
+    <p><div id="iotlab6"></div></p>
+
+    <br /><br />
+    <table style='width:100%;margin-bottom: 10px;'>
+        <tr>
+            <th scope="col" style='width:50%'><h3>Humidity</h3></th>
+            <th scope="col"><h3>Temperature</h3></th>
+        </tr>
+    <tr>
+        <td><button pill class='btn off btn-secondary col-2' id='hum' onclick='sendData(id)'>Fetch</button>
+         <td><button pill class='btn off btn-secondary col-2' id='temp' onclick='sendData(id)'>Fetch</button></td>
+    </tr>
+    </table> 
+    
+    <script>
+        function sendData(butn) {
+                var URL, variab, text;
+        if (butn == 'hum') { 
+                    URL = 'humURL';
+                    variab = 'humidity';
+                    state_activate(butn);
+                    state_deactivate('Green Led');
+                }
+               
+                else{
+                    URL = 'tempURL';
+                    variab = 'temperature';
+                    state_activate(butn);
+                    state_deactivate('Gren Led');
+                }
+
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function (butn) {
+                    if (this.readyState == 4 && this.status == 200)
+                        document.getElementById(variab).innerHTML = this.
+                            responseText;
+                };
+                xhr.open('GET', URL, true);
+                xhr.send();
+            }
+        
+
+        </script>
+
+            <script type="text/javascript">
+        var counter=0;
+        function updateByJS(){
+            counter++;
+            document.getElementById("js_update").innerText="This is the New Text, number of times pressed ="+counter;
+        }
+
+        function updateByAJAX_static(){
+            const xhttp=new XMLHttpRequest();
+            xhttp.onload=function(){
+                document.getElementById("statictext").innerText=this.responseText;
+            }
+            xhttp.open("GET", "/iot/lab6get.php");
+            xhttp.send();
+        }
+        function updateByAJAX_dbData(){
+            const xhttp=new XMLHttpRequest();
+            xhttp.onload=function(){
+                console.log(this.responseText);
+                document.getElementById("iotlab6").innerHTML=this.responseText;
+            }
+            id=document.getElementById("theText").value;
+            console.log(id);
+            
+
+            xhttp.open("GET", "/iot/lab6get.php?ID="+id+"&Sensor="+sensor);
+            xhttp.send();
+        }
+
+    
+        </script>
+
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>
