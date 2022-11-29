@@ -1,6 +1,6 @@
 /* 
  * ESP32_MQTT 
- * Authors: Abena, Emmanuela, Jil, Amma, Akwasi
+ * Authors: Abena, Emmanuela Andam, Jil, Amma, Akwasi
  * Date: 17.11.22
  */
 
@@ -39,10 +39,10 @@ float humidity;
 
 
 //---- MQTT Broker settings
-const char* mqtt_server = "0677d1da3973473d804cb411e35aa04a.s1.eu.hivemq.cloud"; // replace with your broker url
-const char* mqtt_username = "osei-akoto_a1";
-const char* mqtt_password = "12345abc";
-const int mqtt_port =8883;
+const char* mqtt_server = "192.168.41.204";//"0677d1da3973473d804cb411e35aa04a.s1.eu.hivemq.cloud"; // replace with your broker url
+// const char* mqtt_username = "osei-akoto_a1";
+// const char* mqtt_password = "12345abc";
+const int mqtt_port =1883;
 
 WiFiClientSecure espClient;   // for no secure connection use WiFiClient instead of WiFiClientSecure 
 //WiFiClient espClient;
@@ -56,11 +56,11 @@ int sensor1 = 0;
 float sensor2 = 0;
 int command1 =0;
 
-const char* sensor1_topic= "Humidity";
-const char*  sensor2_topic="Temperature";
+const char* sensor1_topic= "esp1/Humidity";
+const char*  sensor2_topic="esp1/Temperature";
 //const char*  sensor2_topic="sensor3";
 
-const char* command1_topic="command1";
+const char* command1_topic="esp1/#";
 //const char* command1_topic="command2";
 
 
@@ -138,7 +138,7 @@ void reconnect() {
     String clientId = "ESP32Client-";   // Create a random client ID
     clientId += String(random(0xffff), HEX);  //you could make this static
     // Attempt to connect
-    if (client.connect(clientId.c_str(), mqtt_username, mqtt_password)) {
+    if (client.connect(clientId.c_str())){//, mqtt_username, mqtt_password)) {
       Serial.println("connected");
 
       client.subscribe(command1_topic);   // subscribe the topics here
